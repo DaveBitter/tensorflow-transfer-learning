@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: white;
+  background: radial-gradient(
+    circle,
+    rgba(91, 91, 213, 1) 0%,
+    rgba(0, 0, 0, 1) 72%
+  );
+}
+
+button {
+  cursor: pointer !important;
+}
+
+video {
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+  aspect-ratio: 4 / 3;
+}
