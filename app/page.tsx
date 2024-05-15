@@ -57,16 +57,25 @@ export default function Home() {
 
   const trainAndPredict = async () => {
     setIsTraining(true);
+    shouldPredict.current = false;
 
-    const xs = tf.stack(trainingData.map((data) => data.input));
-    const ys = tf.oneHot(
-      trainingData.map((data) => data.output),
-      numberOfClasses
-    );
+    const trainingDataInputs = trainingData.map((data) => data.input);
+    const trainingDataOutputs = trainingData.map((data) => data.output);
 
-    await model.fit(xs, ys, {
-      epochs: 20,
+    tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
+    let outputsAsTensor = tf.tensor1d(trainingDataOutputs, "int32");
+    let oneHotOutputs = tf.oneHot(outputsAsTensor, numberOfClasses);
+    let inputsAsTensor = tf.stack(trainingDataInputs);
+
+    await model.fit(inputsAsTensor, oneHotOutputs, {
+      shuffle: true,
+      batchSize: 5,
+      epochs: 10,
     });
+
+    outputsAsTensor.dispose();
+    oneHotOutputs.dispose();
+    inputsAsTensor.dispose();
 
     setIsTraining(false);
     shouldPredict.current = true;
