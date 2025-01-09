@@ -1,22 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { showToast } from "../utils/showToast";
 
 export const useTensorFlow = () => {
-  const tf = useRef<any>(null);
+  const [tf, setTf] = useState<any>(null);
 
   useEffect(() => {
     showToast("Loading TensorFlow");
 
     import("@tensorflow/tfjs").then((tfModule) => {
-      tf.current = tfModule;
+      setTf(tfModule);
     });
   }, []);
 
   useEffect(() => {
-    if (tf.current) {
+    if (tf) {
       showToast("Loaded TensorFlow");
     }
-  }, [tf.current]);
+  }, [tf]);
 
-  return tf.current;
+  return tf;
 };
